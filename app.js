@@ -19,7 +19,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/books', (req, res) => {
-    res.send(createListTemplate());
+    if(req.query.search) {
+        const text = req.query.search.toLowerCase();
+        const books = BOOKS_DATA.filter(book =>
+            book.title.toLowerCase().includes(text) || book.author.toLowerCase().includes(text)
+        );
+        return res.send(createListTemplate(books));
+    }
+    res.send(createListTemplate(BOOKS_DATA));
 });
 
 app.post('/books', (req, res) => {
